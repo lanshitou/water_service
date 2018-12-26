@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zzwl.ias.mapper.InfoSubjectExtDOMapper">
+    <resultMap type="com.zzwl.ias.domain.InfoSubjectCatDO" id="InfoSubjectCatDO">
+        <id column="id" property="id" jdbcType="SMALLINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="subjectId" property="subjectId" jdbcType="SMALLINT" />
+    </resultMap>
+
+    <resultMap type="com.zzwl.ias.domain.InfoSubjectCatArticleDO" id="InfoSubjectCatArticleDO">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="subjectId" property="subjectId" jdbcType="SMALLINT" />
+        <result column="subjectCatId" property="subjectCatId" jdbcType="SMALLINT" />
+        <result column="articleId" property="articleId" jdbcType="INTEGER" />
+    </resultMap>
+
+    <resultMap type="com.zzwl.ias.domain.InfoSubjectDO" id="InfoSubjectDO">
+        <id column="id" property="id" jdbcType="SMALLINT" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="img" property="img" jdbcType="VARCHAR" />
+        <result column="originImg" property="originImg" jdbcType="VARCHAR" />
+        <result column="watchCount" property="watchCount" jdbcType="SMALLINT" />
+        <result column="commentCount" property="commentCount" jdbcType="SMALLINT" />
+        <result column="publishTime" property="publishTime" jdbcType="TIMESTAMP" />
+        <result column="summary" property="summary" jdbcType="VARCHAR" />
+        <result column="origin" property="origin" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="findSubjectCatBySubjectId" resultMap="InfoSubjectCatDO">
+        select *
+        from info_subject_cat
+        where subjectId = #{id}
+    </select>
+
+    <select id="findInfoSubjectCatArticleDOByCatId" resultMap="InfoSubjectCatArticleDO">
+        select *
+        from info_subject_cat_article
+        where subjectCatId = #{catId}
+          and subjectId = #{subjectId}
+    </select>
+
+    <select id="findSubjectByIdList" resultMap="InfoSubjectDO">
+        select * from info_subject
+        where
+        <choose>
+            <when test="ids != null and ids.size > 0">
+                id in
+                <foreach collection="ids" item="id" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </when>
+            <otherwise>
+                1 = 0
+            </otherwise>
+        </choose>
+        order by watchCount desc
+    </select>
+</mapper>

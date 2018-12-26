@@ -1,0 +1,10 @@
+
+#Mybatis日志
+mybatis:
+  mapperLocations: classpath:mapper/*.xml
+#  typeAliasesPackage: cn.tomsung.domain
+  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    use-generated-keys: true
+
+

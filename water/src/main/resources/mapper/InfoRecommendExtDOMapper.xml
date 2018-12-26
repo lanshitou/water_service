@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zzwl.ias.mapper.InfoRecommendExtDOMapper">
+    <resultMap type="com.zzwl.ias.domain.InfoRecommendDO" id="InfoRecommendDO">
+        <result column="articleId" property="articleId" jdbcType="INTEGER" />
+        <result column="subjectId" property="subjectId" jdbcType="SMALLINT" />
+    </resultMap>
+
+    <select id="findRecommendByUserId" resultMap="InfoRecommendDO">
+        (select articleId, subjectId
+         from info_recommend
+         where userId = #{id}
+         order by id
+         limit 14)
+        union
+            (select id as subjectId, null as articleId
+             from info_subject order by watchCount desc
+             limit 4)
+        union
+            (select id as articleId, null as subjectId
+             from info_article order by watchCount desc
+             limit 14)
+        limit 14
+    </select>
+</mapper>
